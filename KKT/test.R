@@ -8,7 +8,7 @@ shell("del test2.dll test2.o")
 shell("Rcmd SHLIB test2.f90")
 
 dyn.load("test2.dll")
-a = as.integer(3)
+a = 3.1
 dd <- .Fortran("aa", a=a)
 
 
@@ -47,18 +47,13 @@ thr = 1e-8
 vio_count = as.integer(0)
 dd <- .Fortran("KKT", q=qv, b0=b0, betas=as.matrix(betas),
                nn=nn, pp=pp, lam1=m$lambda, lam2=lambda2,
-               l=l, x=x, y=y, rres=rres, thr=thr, vio_count=vio_count, quiet=T)
+               l=l, x=x, y=y, thr=thr, vio_count=vio_count, quiet=T)
 dd$vio_count/l/pp * 100
 
 
 source("D:/GitHub/powerfamily/U_tool.R")
 setwd("D:/GitHub/powerfamily/KKT")
 KKTnp(b0, betas, y, x, c(0.1,0.01), lambda2, thr, loss = "power", qv=2)
-
-
-
-
-
 
 r = y * (x %*% betas + matrix(rep(b0,nn),nn,length(m$lambda),byrow=T))
 decib = qv/ (qv + 1)    
@@ -108,3 +103,42 @@ for (l in 1:length(lambda)) {
 }
 ctr = ctrn0 + ctr0
 ctr
+
+
+
+
+
+
+
+
+##################################################
+rm(list=ls(all=T))
+
+
+source("D:/GitHub/powerfamily/U_tool.R")
+setwd("D:/GitHub/powerfamily")
+
+
+
+set.seed(1234)
+FHT = FHTgen(n=80, p=95, rho=0.5)
+dat = FHT
+
+
+
+dyn.unload("M_powerfamilyNET.dll")
+shell("del M_powerfamilyNET.dll M_powerfamilyNET.o")
+shell("Rcmd SHLIB M_powerfamilyNET.f90 M_powerfamilyintNET.f90 M_powerfamilyhalfNET.f90 O_auxiliary.f90 -o M_powerfamilyNET.dll")
+dyn.load("M_powerfamilyNET.dll")
+
+lambda2 = 1; qv = 0.25; eps = 1e-6; thr = 1e-4
+KKTperctg(dat, lambda2=lambda2, qv=qv, eps=eps, thr=thr)
+
+
+dyn.unload("M_powerfamilyNET.dll")
+shell("del M_powerfamilyNET.dll M_powerfamilyNET.o")
+shell("Rcmd SHLIB M_powerfamilyNET2.f90 M_powerfamilyintNET.f90 M_powerfamilyhalfNET.f90 O_auxiliary.f90 -o M_powerfamilyNET.dll")
+dyn.load("M_powerfamilyNET.dll")
+
+lambda2 = 1; qv = 0.25; eps = 1e-6; thr = 1e-4
+KKTperctg(dat, lambda2=lambda2, qv=qv, eps=eps, thr=thr)
