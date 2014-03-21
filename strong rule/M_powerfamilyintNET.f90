@@ -1,7 +1,8 @@
 ! --------------------------------------------------------------------------
-! powerfamilyNET.f90: the GCD algorithm for loss function of power family. !!!
+! powerfamilyintNET.f90: the GCD algorithm for loss function of power family. !!!
 ! --------------------------------------------------------------------------
-! 
+! The program is specifically written when q is an integer.
+!
 ! USAGE:
 ! 
 ! call powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
@@ -79,7 +80,7 @@
 !    Journal of Computational and Graphical Statistics, 22, 396-415. 
 
 
-SUBROUTINE powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
+SUBROUTINE powerfamilyintNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
 & pmax, nlam, flmin, ulam, eps, isd, maxit, nalam, b0, beta, ibeta, &
 & nbeta, alam, npass, jerr) !!!
 ! --------------------------------------------------
@@ -98,7 +99,7 @@ SUBROUTINE powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
       INTEGER :: jd (*)
       INTEGER :: ibeta (pmax)
       INTEGER :: nbeta (nlam)
-      DOUBLE PRECISION :: q
+      INTEGER :: q
       DOUBLE PRECISION :: capm
       DOUBLE PRECISION :: lam2
       DOUBLE PRECISION :: flmin
@@ -148,7 +149,7 @@ SUBROUTINE powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
       pf = Max (0.0D0, pf)
       pf2 = Max (0.0D0, pf2)
       CALL standard (nobs, nvars, x, ju, isd, xmean, xnorm, maj)
-      CALL powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
+      CALL powerfamilyintNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
      & pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, maxit, nalam, b0, beta, &
      & ibeta, nbeta, alam, npass, jerr)
       IF (jerr > 0) RETURN! check error after calling function
@@ -165,10 +166,10 @@ SUBROUTINE powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
       END DO
       DEALLOCATE (ju, xmean, xnorm, maj)
       RETURN
-END SUBROUTINE powerfamilyNET !!!
+END SUBROUTINE powerfamilyintNET !!!
 
 ! --------------------------------------------------
-SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
+SUBROUTINE powerfamilyintNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
 & pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, maxit, nalam, b0, beta, m, &
 & nbeta, alam, npass, jerr)
 ! --------------------------------------------------
@@ -190,7 +191,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
       INTEGER :: ju (nvars)
       INTEGER :: m (pmax)
       INTEGER :: nbeta (nlam)
-      DOUBLE PRECISION :: q
+      INTEGER :: q
       DOUBLE PRECISION :: capm
       DOUBLE PRECISION :: lam2
       DOUBLE PRECISION :: eps
@@ -213,7 +214,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
       DOUBLE PRECISION :: alf
       DOUBLE PRECISION :: flmin
       DOUBLE PRECISION :: dl (nobs)
- 	  DOUBLE PRECISION :: decib
+	  DOUBLE PRECISION :: decib
 	  DOUBLE PRECISION :: fdr
       DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: b
       DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: oldbeta
@@ -228,7 +229,6 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
       INTEGER :: ni
       INTEGER :: me
       INTEGER, DIMENSION (:), ALLOCATABLE :: mm
-	  
 ! - - - begin - - -
 ! - - - allocate variables - - -
       ALLOCATE (b(0:nvars), STAT=jerr)
@@ -248,7 +248,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
       npass = 0
       ni = npass
       mnl = Min (mnlam, nlam)
-      capm = 2.0D0 * (q + 1.0D0) ** 2.0D0 / q !!!
+      capm = 2.0D0 * (DBLE(q) + 1.0D0) ** 2.0D0 / DBLE(q) !!!
       maj = maj * capm !!!
       IF (flmin < 1.0D0) THEN
          flmin = Max (mfl, flmin)
@@ -256,9 +256,8 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
       END IF
 	  ! decision boundary of loss function
 	  
-	     decib = q / (q + 1.0D0)
-	     fdr = - decib ** (q + 1.0D0)
-
+	     decib = DBLE(q) / (DBLE(q) + 1.0D0)
+	     fdr = - decib ** (DBLE(q) + 1.0D0)
 ! --------- lambda loop ----------------------------
       DO l = 1, nlam
          IF (flmin >= 1.0D0) THEN
@@ -273,7 +272,6 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
                DO i = 1, nobs !!!!!!!!!!!!!!!!!!!!!!
                   IF (r(i) > decib) THEN
                      dl (i) = r(i) ** (- q - 1) * fdr
-					 ! recall fdr = -(q/(q+1))^(q+1)
                   ELSE
                      dl (i) = -1.0D0
                   END IF
@@ -310,14 +308,11 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
                         END IF
                         u = u + dl (i) * y (i) * x (i, k)
                      END DO !!!!!!!!!!!!!!!!!!!!!!
-					 ! (\sum_{i=1}^n V'(u_i)y_i x_{ij} )
-					 u = maj (k) * b (k) - u / nobs
-					 ! M \tilde{\beta_j} - 1/n * (\sum_{i=1}^n V'(u_i)y_i x_{ij} )
+                     u = maj (k) * b (k) - u / nobs
                      v = al * pf (k)
                      v = Abs (u) - v
                      IF (v > 0.0D0) THEN
                      	b (k) = sign (v, u) / (maj(k) + pf2(k) * lam2)
-						! The update of the coefficients in Algorithm 1
                      ELSE
                         b (k) = 0.0D0
                      END IF
@@ -431,33 +426,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
          me = count (beta(1:ni, l) /= 0.0D0)
          IF (me > dfmax) EXIT
       END DO
+	  q = DBLE (q)
       DEALLOCATE (b, oldbeta, r, mm)
       RETURN
-END SUBROUTINE powerfamilyNETpath !!!
-
-
-
-SUBROUTINE powerdrv(q,nobs,nvars,x,y,r,vl)
-IMPLICIT NONE
-INTEGER :: nobs
-INTEGER :: nvars
-INTEGER :: i
-DOUBLE PRECISION :: q
-DOUBLE PRECISION :: dl(nobs)
-DOUBLE PRECISION :: y(nobs)
-DOUBLE PRECISION :: r(nobs)
-DOUBLE PRECISION :: x(nobs,nvars)
-DOUBLE PRECISION :: vl(nvars)                                                                                                                                                                                                           
-vl = 0.0
-DO i = 1, nobs
-    IF (r(i) > decib) THEN
-        dl (i) = r(i) ** (- q - 1) * fdr
-        ELSE
-            dl (i) = -1.0D0
-        END IF
-ENDDO
-vl = Matmul(dl*y, x) / nobs
-END SUBROUTINE powerdrv
-
-
-
+END SUBROUTINE powerfamilyintNETpath !!!

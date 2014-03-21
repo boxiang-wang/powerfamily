@@ -1,10 +1,11 @@
 ! --------------------------------------------------------------------------
-! powerfamilyNET.f90: the GCD algorithm for loss function of power family. !!!
+! powerfamilyhalfNET.f90: the GCD algorithm for loss function of power family. !!!
 ! --------------------------------------------------------------------------
-! 
+! The program is specifically written when q is an integer.
+!
 ! USAGE:
 ! 
-! call powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
+! call powerfamilyhalfNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
 ! & pmax, nlam, flmin, ulam, eps, isd, maxit, nalam, b0, beta, ibeta, &
 ! & nbeta, alam, npass, jerr) !!!
 ! 
@@ -79,7 +80,7 @@
 !    Journal of Computational and Graphical Statistics, 22, 396-415. 
 
 
-SUBROUTINE powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
+SUBROUTINE powerfamilyhalfNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
 & pmax, nlam, flmin, ulam, eps, isd, maxit, nalam, b0, beta, ibeta, &
 & nbeta, alam, npass, jerr) !!!
 ! --------------------------------------------------
@@ -148,7 +149,7 @@ SUBROUTINE powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
       pf = Max (0.0D0, pf)
       pf2 = Max (0.0D0, pf2)
       CALL standard (nobs, nvars, x, ju, isd, xmean, xnorm, maj)
-      CALL powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
+      CALL powerfamilyhalfNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
      & pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, maxit, nalam, b0, beta, &
      & ibeta, nbeta, alam, npass, jerr)
       IF (jerr > 0) RETURN! check error after calling function
@@ -165,10 +166,10 @@ SUBROUTINE powerfamilyNET (q, lam2, nobs, nvars, x, y, jd, pf, pf2, dfmax, &
       END DO
       DEALLOCATE (ju, xmean, xnorm, maj)
       RETURN
-END SUBROUTINE powerfamilyNET !!!
+END SUBROUTINE powerfamilyhalfNET !!!
 
 ! --------------------------------------------------
-SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
+SUBROUTINE powerfamilyhalfNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
 & pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, maxit, nalam, b0, beta, m, &
 & nbeta, alam, npass, jerr)
 ! --------------------------------------------------
@@ -272,8 +273,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
                al = 0.0D0
                DO i = 1, nobs !!!!!!!!!!!!!!!!!!!!!!
                   IF (r(i) > decib) THEN
-                     dl (i) = r(i) ** (- q - 1) * fdr
-					 ! recall fdr = -(q/(q+1))^(q+1)
+                     dl (i) = 1.0D0 / (r(i) * Sqrt(r(i))) * fdr
                   ELSE
                      dl (i) = -1.0D0
                   END IF
@@ -304,20 +304,17 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
                      u = 0.0D0
                      DO i = 1, nobs   !!!!!!!!!!!!!!!!!!!!!!
                         IF (r(i) > decib) THEN
-                           dl (i) = r(i) ** (- q - 1) * fdr
+                           dl (i) = 1.0D0 / (r(i) * Sqrt(r(i))) * fdr
                         ELSE
                            dl (i) = -1.0D0
                         END IF
                         u = u + dl (i) * y (i) * x (i, k)
                      END DO !!!!!!!!!!!!!!!!!!!!!!
-					 ! (\sum_{i=1}^n V'(u_i)y_i x_{ij} )
-					 u = maj (k) * b (k) - u / nobs
-					 ! M \tilde{\beta_j} - 1/n * (\sum_{i=1}^n V'(u_i)y_i x_{ij} )
+                     u = maj (k) * b (k) - u / nobs
                      v = al * pf (k)
                      v = Abs (u) - v
                      IF (v > 0.0D0) THEN
                      	b (k) = sign (v, u) / (maj(k) + pf2(k) * lam2)
-						! The update of the coefficients in Algorithm 1
                      ELSE
                         b (k) = 0.0D0
                      END IF
@@ -338,7 +335,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
                d = 0.0D0
                DO i = 1, nobs
                      IF (r(i) > decib) THEN
-                        dl (i) = r(i) ** (- q - 1) * fdr
+                        dl (i) = 1.0D0 / (r(i) * Sqrt(r(i))) * fdr
                      ELSE
                         dl (i) = -1.0D0
                  END IF
@@ -361,7 +358,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
                      u = 0.0D0
                      DO i = 1, nobs   !!!!!!!!!!!!!!!!!!!!!!
                         IF (r(i) > decib) THEN
-                           dl (i) = r(i) ** (- q - 1) * fdr
+                           dl (i) = 1.0D0 / (r(i) * Sqrt(r(i))) * fdr
                         ELSE
                            dl (i) = -1.0D0
                         END IF
@@ -384,7 +381,7 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
                   d = 0.0D0
                      DO i = 1, nobs   !!!!!!!!!!!!!!!!!!!!!!
                         IF (r(i) > decib) THEN
-                           dl (i) = r(i) ** (- q - 1) * fdr
+                           dl (i) = 1.0D0 / (r(i) * Sqrt(r(i))) * fdr
                         ELSE
                            dl (i) = -1.0D0
                         END IF
@@ -433,31 +430,4 @@ SUBROUTINE powerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
       END DO
       DEALLOCATE (b, oldbeta, r, mm)
       RETURN
-END SUBROUTINE powerfamilyNETpath !!!
-
-
-
-SUBROUTINE powerdrv(q,nobs,nvars,x,y,r,vl)
-IMPLICIT NONE
-INTEGER :: nobs
-INTEGER :: nvars
-INTEGER :: i
-DOUBLE PRECISION :: q
-DOUBLE PRECISION :: dl(nobs)
-DOUBLE PRECISION :: y(nobs)
-DOUBLE PRECISION :: r(nobs)
-DOUBLE PRECISION :: x(nobs,nvars)
-DOUBLE PRECISION :: vl(nvars)                                                                                                                                                                                                           
-vl = 0.0
-DO i = 1, nobs
-    IF (r(i) > decib) THEN
-        dl (i) = r(i) ** (- q - 1) * fdr
-        ELSE
-            dl (i) = -1.0D0
-        END IF
-ENDDO
-vl = Matmul(dl*y, x) / nobs
-END SUBROUTINE powerdrv
-
-
-
+END SUBROUTINE powerfamilyhalfNETpath !!!

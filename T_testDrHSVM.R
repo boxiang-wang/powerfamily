@@ -62,6 +62,9 @@ dat = NULL
 dat$x = as.matrix(x)
 dat$y = c(-1,1)[as.factor(y)]
 
+m1 = GCDpower(x=dat$x, y=dat$y, lambda=c(1,0),
+                 lambda2=0, qv=2, method="power",eps=1e-8, maxit=3e7, standardize=F)
+
 #########################################################################
 # comparison between power family and huber (gcdnet)
 
