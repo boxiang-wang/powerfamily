@@ -6,6 +6,33 @@
 ## Journal of Computational and Graphical Statistics.
 ## http://users.stat.umn.edu/~zouxx019/Papers/gcdnet.pdf
 ## or http://users.stat.umn.edu/~yiyang/resources/papers/JCGS_gcdnet.pdf
+powerfamilyintpath <- function(x, y, nlam, flmin, ulam, isd, 
+                            eps, dfmax, pmax, jd, pf, pf2, maxit, lam2, qv, nobs, nvars, 
+                            vnames) {
+  #################################################################################
+  #data setup
+  y <- as.factor(y)
+  y <- c(-1, 1)[as.numeric(y)]
+  if (!all(y %in% c(-1, 1))) 
+    stop("y should be a factor with two levels")
+  if (qv < 0) 
+    stop("delta must be non-negative")
+  qv <- as.integer(qv)
+  #################################################################################
+  # call Fortran core
+  fit <- .Fortran("powerfamilyintNET", qv, lam2, nobs, nvars, 
+                  as.double(x), as.double(y), jd, pf, pf2, dfmax, pmax, nlam, 
+                  flmin, ulam, eps, isd, maxit, nalam = integer(1), b0 = double(nlam), 
+                  beta = double(pmax * nlam), ibeta = integer(pmax), nbeta = integer(nlam), 
+                  alam = double(nlam), npass = integer(1), jerr = integer(1))
+  #################################################################################
+  # output
+  outlist <- getoutput(fit, maxit, pmax, nvars, vnames)
+  outlist <- c(outlist, list(npasses = fit$npass, jerr = fit$jerr))
+  class(outlist) <- c("powerfamily")
+  outlist
+} 
+
 powerfamilypath <- function(x, y, nlam, flmin, ulam, isd, 
                      eps, dfmax, pmax, jd, pf, pf2, maxit, lam2, qv, nobs, nvars, 
                      vnames) {
@@ -25,6 +52,33 @@ powerfamilypath <- function(x, y, nlam, flmin, ulam, isd,
                    flmin, ulam, eps, isd, maxit, nalam = integer(1), b0 = double(nlam), 
                    beta = double(pmax * nlam), ibeta = integer(pmax), nbeta = integer(nlam), 
                    alam = double(nlam), npass = integer(1), jerr = integer(1))
+  #################################################################################
+  # output
+  outlist <- getoutput(fit, maxit, pmax, nvars, vnames)
+  outlist <- c(outlist, list(npasses = fit$npass, jerr = fit$jerr))
+  class(outlist) <- c("powerfamily")
+  outlist
+} 
+
+powerfamilyhalfpath <- function(x, y, nlam, flmin, ulam, isd, 
+                            eps, dfmax, pmax, jd, pf, pf2, maxit, lam2, qv, nobs, nvars, 
+                            vnames) {
+  #################################################################################
+  #data setup
+  y <- as.factor(y)
+  y <- c(-1, 1)[as.numeric(y)]
+  if (!all(y %in% c(-1, 1))) 
+    stop("y should be a factor with two levels")
+  if (qv < 0) 
+    stop("delta must be non-negative")
+  qv <- as.double(qv)
+  #################################################################################
+  # call Fortran core
+  fit <- .Fortran("powerfamilyhalfNET", qv, lam2, nobs, nvars, 
+                  as.double(x), as.double(y), jd, pf, pf2, dfmax, pmax, nlam, 
+                  flmin, ulam, eps, isd, maxit, nalam = integer(1), b0 = double(nlam), 
+                  beta = double(pmax * nlam), ibeta = integer(pmax), nbeta = integer(nlam), 
+                  alam = double(nlam), npass = integer(1), jerr = integer(1))
   #################################################################################
   # output
   outlist <- getoutput(fit, maxit, pmax, nvars, vnames)
@@ -118,8 +172,31 @@ GCDpower <- function(x, y, nlambda = 100, method = c("power","hhsvm"),
     ulam <- as.double(rev(sort(lambda)))
     nlam <- as.integer(length(lambda))
   }
+  if ( (method == "power") && (abs(qv %% 1) < eps))
+  {
+    method = "powerint"
+    qv = as.integer(qv)
+  }
+  if (method == "power")
+  {
+    if(abs(qv %% 1) < eps)
+    {
+      method = "powerint"
+      qv = as.integer(qv)
+    } 
+    if (abs(qv - 0.5) < eps)
+    {
+      method = "powerhalf"
+    }  
+  }
   #################################################################################
   fit <- switch(method, 
+                powerhalf = powerfamilyhalfpath(x, y, nlam, flmin, 
+                                             ulam, isd, eps, dfmax, pmax, jd, pf, pf2, 
+                                                 maxit, lam2, qv, nobs, nvars, vnames),
+                powerint = powerfamilyintpath(x, y, nlam, flmin, 
+                                  ulam, isd, eps, dfmax, pmax, jd, pf, pf2, maxit, 
+                                  lam2, qv, nobs, nvars, vnames),
                 power = powerfamilypath(x, y, nlam, flmin, 
                                  ulam, isd, eps, dfmax, pmax, jd, pf, pf2, maxit, 
                                         lam2, qv, nobs, nvars, vnames), 
@@ -127,6 +204,7 @@ GCDpower <- function(x, y, nlambda = 100, method = c("power","hhsvm"),
                                  ulam, isd, eps, dfmax, pmax, jd, pf, pf2, maxit, 
                                  lam2, delta, nobs, nvars, vnames)
                 )
+  if(method == "powerint") method = "power"
   if (is.null(lambda)) 
     fit$lambda <- lamfix(fit$lambda)
   fit$call <- this.call

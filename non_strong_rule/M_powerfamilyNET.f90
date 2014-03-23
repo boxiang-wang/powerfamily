@@ -437,27 +437,4 @@ END SUBROUTINE powerfamilyNETpath !!!
 
 
 
-!!SUBROUTINE powerdrv(q,nobs,nvars,x,y,r,vl)
-!IMPLICIT NONE
-!INTEGER :: nobs
-!INTEGER :: nvars
-!INTEGER :: i
-!DOUBLE PRECISION :: q
-!DOUBLE PRECISION :: dl(nobs)
-!DOUBLE PRECISION :: y(nobs)
-!DOUBLE PRECISION :: r(nobs)
-!DOUBLE PRECISION :: x(nobs,nvars)
-!DOUBLE PRECISION :: vl(nvars)                                                                                                                                                                                                           
-!vl = 0.0
-!DO i = 1, nobs
-!    IF (r(i) > decib) THEN
-!        dl (i) = r(i) ** (- q - 1) * fdr
-!        ELSE
-!            dl (i) = -1.0D0
-!        END IF
-!ENDDO
-!vl = Matmul(dl*y, x) / nobs
-!END SUBROUTINE powerdrv
-
-
 

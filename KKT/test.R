@@ -109,6 +109,23 @@ ctr
 
 
 
+## compare timing
+load("D:\\GitHub\\powerfamily\\data\\leuk.rda")
+x = tx
+y = ty
+dat = list(x = x, y = y)
+
+
+require(gcdnet)
+system.time(m2 <- gcdnet(x=dat$x, y=dat$y, maxit=3e7,
+                         lambda2=0, method="logit",eps=eps, standardize=T))[3]
+m2$npass
+require(glmnet)
+system.time(m3 <- glmnet(x=dat$x, y=dat$y, maxit=3e7,
+                         alpha=1, family="binomial",thresh=eps, standardize=T))[3]
+m3$npass
+
+
 
 
 ##################################################
@@ -118,27 +135,44 @@ rm(list=ls(all=T))
 source("D:/GitHub/powerfamily/U_tool.R")
 setwd("D:/GitHub/powerfamily")
 
-
-
 set.seed(1234)
-FHT = FHTgen(n=80, p=95, rho=0.5)
+FHT = FHTgen(n=100, p=3000, rho=0.5)
 dat = FHT
 
 
+load("D:\\GitHub\\powerfamily\\data\\arcene.rda")
+x = tx
+y = ty
+dat = list(x = x, y = y)
 
 dyn.unload("M_powerfamilyNET.dll")
 shell("del M_powerfamilyNET.dll M_powerfamilyNET.o")
-shell("Rcmd SHLIB M_powerfamilyNET.f90 M_powerfamilyintNET.f90 M_powerfamilyhalfNET.f90 O_auxiliary.f90 -o M_powerfamilyNET.dll")
+shell("Rcmd SHLIB M_powerfamilyNET.f90 O_auxiliary.f90 -o M_powerfamilyNET.dll")
 dyn.load("M_powerfamilyNET.dll")
 
-lambda2 = 1; qv = 0.25; eps = 1e-6; thr = 1e-4
-KKTperctg(dat, lambda2=lambda2, qv=qv, eps=eps, thr=thr)
+lambda2 = 1; qv = 2; eps = 1e-8; thr = 1e-3
+#KKTperctg(dat, lambda2=lambda2, qv=qv, eps=eps, thr=thr)
+
+system.time(m1 <- GCDpower(x=dat$x, y=dat$y,maxit=3e7,
+                  lambda2=lambda2, qv=qv, method="power",eps=eps, standardize=T))[3]
+m1$npass
 
 
-dyn.unload("M_powerfamilyNET.dll")
-shell("del M_powerfamilyNET.dll M_powerfamilyNET.o")
-shell("Rcmd SHLIB M_powerfamilyNET2.f90 M_powerfamilyintNET.f90 M_powerfamilyhalfNET.f90 O_auxiliary.f90 -o M_powerfamilyNET.dll")
-dyn.load("M_powerfamilyNET.dll")
 
-lambda2 = 1; qv = 0.25; eps = 1e-6; thr = 1e-4
-KKTperctg(dat, lambda2=lambda2, qv=qv, eps=eps, thr=thr)
+
+source("D:/GitHub/powerfamily/non_strong_rule/U_tool_non_strong.R")
+#KKTperctg(dat, lambda2=lambda2, qv=qv, eps=eps, thr=thr)
+
+system.time(m2 <- GCDpower(x=dat$x, y=dat$y, maxit=3e7,
+                  lambda2=lambda2, qv=qv, method="power",eps=eps, standardize=T))[3]
+m2$npass
+
+
+max(abs(m1$beta-m2$beta))
+
+
+
+
+
+
+
