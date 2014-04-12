@@ -10,4 +10,4 @@ source("/home/wang3660/Research/PF/classrate/DrSVM/U_cv.DrSVM.fix2.R")
 source("/home/wang3660/Research/PF/classrate/DrSVM/M_coef.DrSVM.R")
 source("/home/wang3660/Research/PF/classrate/DrSVM/M_DrSVM_Fix2.R")
 
-dyn.load("/home/wang3660/Research/PF/M_powerfamilyNET.so")
+dyn.load("/home/wang3660/Research/PF/M_powerfamily.so")

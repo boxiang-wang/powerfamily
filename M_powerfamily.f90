@@ -84,7 +84,7 @@
 
       SUBROUTINE PowerfamilyNET (q, lam2, nobs, nvars, x, y, jd, &
       & pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, isd, maxit, &
-      & nalam, b0, beta, ibeta, nbeta, alam, npass, jerr) 
+      & nalam, b0, beta, ibeta, nbeta, alam, npass, jerr, strong) 
 
          IMPLICIT NONE
 !------- arg types ----------------------------------------------
@@ -95,7 +95,8 @@
          DOUBLE PRECISION :: pf (nvars), pf2 (nvars)
          DOUBLE PRECISION :: ulam (nlam), alam (nlam)
          DOUBLE PRECISION :: beta (pmax, nlam), b0 (nlam)
-
+         LOGICAL :: strong
+         
 !------- local declarations -------------------------------------
          INTEGER :: j, l, nk, ierr, ju (nvars), q_int
          DOUBLE PRECISION :: xmean (nvars), xnorm (nvars), maj (nvars)
@@ -103,15 +104,15 @@
 !------- preliminary step ---------------------------------------
          CALL chkvars (nobs, nvars, x, ju)
          IF (jd(1) > 0) ju(jd(2:(jd(1)+1))) = 0
-         IF (maxval(ju) <= 0) THEN
+         IF (Maxval (ju) <= 0) THEN
             jerr = 7777
             RETURN
          END IF
-         IF (maxval(pf) <= 0.0D0) THEN
+         IF (Maxval (pf) <= 0.0D0) THEN
             jerr = 10000
             RETURN
          END IF
-         IF (maxval(pf2) <= 0.0D0) THEN
+         IF (Maxval (pf2) <= 0.0D0) THEN
             jerr = 10000
             RETURN
          END IF
@@ -126,16 +127,18 @@
             q_int = Nint (q)
             CALL PowerfamilyIntNETpath (q_int, lam2, maj, nobs, nvars, &
             & x, y, ju, pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, &
-            & maxit, nalam, b0, beta, ibeta, nbeta, alam, npass, jerr)
+            & maxit, nalam, b0, beta, ibeta, nbeta, alam, npass, &
+            & jerr, strong)
 !------- the case when q is 0.5 ---------------------------------
          ELSE IF ( Abs (q - 0.5) < eps) THEN
             CALL PowerfamilyHalfNETpath (q, lam2, maj, nobs, nvars, &
             & x, y, ju, pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, &
-            & maxit, nalam, b0, beta, ibeta, nbeta, alam, npass, jerr)
+            & maxit, nalam, b0, beta, ibeta, nbeta, alam, npass, &
+            & jerr, strong)
          ELSE
-            CALL PowerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, ju, &
-            & pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, maxit, nalam, &
-            & b0, beta, ibeta, nbeta, alam, npass, jerr)
+            CALL PowerfamilyNETpath (q, lam2, maj, nobs, nvars, x, y, &
+            ju, pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, maxit, &
+            & nalam, b0, beta, ibeta, nbeta, alam, npass, jerr, strong)
          END IF
          IF (jerr > 0) RETURN  ! check error after calling function
 
@@ -163,7 +166,7 @@
 
       SUBROUTINE PowerfamilyNETpath (q, lam2, maj, nobs, nvars, &
       & x, y, ju, pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, &
-      & maxit, nalam, b0, beta, m, nbeta, alam, npass, jerr)
+      & maxit, nalam, b0, beta, m, nbeta, alam, npass, jerr, strong)
       
          IMPLICIT NONE
 !------- arg types -----------------------------------------------
@@ -179,7 +182,8 @@
          DOUBLE PRECISION :: pf (nvars), pf2 (nvars),  ulam (nlam)
          DOUBLE PRECISION :: beta (pmax, nlam), b0 (nlam)
          DOUBLE PRECISION :: alam (nlam), maj (nvars)
-
+         LOGICAL :: strong
+         
 !------- local declarations -------------------------------------
          DOUBLE PRECISION :: d, dif, oldb, u, v, al, alf, flmin
          DOUBLE PRECISION :: decib, fdr, dl (nobs), r (nobs)
@@ -209,12 +213,17 @@
 !   jxx = 0 using the strong rule
 !   jxx = 1 not using the strong rule
          jxx = 0
+         IF (strong .EQV. .TRUE.) THEN
+            jxx = 0
+         ELSE
+            jxx = 1
+         END IF
          
 !---------- lambda loop -----------------------------------------
          mnl = Min (MNLAM, nlam)
          IF (flmin < 1.0D0) THEN
             flmin = Max (MFL, flmin)
-            alf = flmin ** (1.0D0/(nlam-1.0D0))
+            alf = flmin ** (1.0D0 / (nlam-1.0D0))
          END IF
             vl = 0.0D0
             CALL Powerdrv(q, nobs, nvars, x, y, r, vl, decib, fdr)
@@ -462,7 +471,7 @@
 
       SUBROUTINE PowerfamilyHalfNETpath (q, lam2, maj, nobs, nvars, &
       & x, y, ju, pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, &
-      & maxit, nalam, b0, beta, m, nbeta, alam, npass, jerr)
+      & maxit, nalam, b0, beta, m, nbeta, alam, npass, jerr, strong)
       
          IMPLICIT NONE
 !------- arg types -----------------------------------------------
@@ -478,7 +487,8 @@
          DOUBLE PRECISION :: pf (nvars), pf2 (nvars),  ulam (nlam)
          DOUBLE PRECISION :: beta (pmax, nlam), b0 (nlam)
          DOUBLE PRECISION :: alam (nlam), maj (nvars)
-
+         LOGICAL :: strong
+         
 !------- local declarations -------------------------------------
          DOUBLE PRECISION :: d, dif, oldb, u, v, al, alf, flmin
          DOUBLE PRECISION :: decib, fdr, dl (nobs), r (nobs)
@@ -513,12 +523,17 @@
 !   jxx = 0 using the strong rule
 !   jxx = 1 not using the strong rule
          jxx = 0
+         IF (strong .EQV. .TRUE.) THEN
+            jxx = 0
+         ELSE
+            jxx = 1
+         END IF
          
 !---------- lambda loop -----------------------------------------
          mnl = Min (MNLAM, nlam)
          IF (flmin < 1.0D0) THEN
             flmin = Max (MFL, flmin)
-            alf = flmin ** (1.0D0/(nlam-1.0D0))
+            alf = flmin ** (1.0D0 / (nlam-1.0D0))
          END IF
             vl = 0.0D0
             CALL PowerdrvHalf(q, nobs, nvars, x, y, r, vl, decib, fdr)
@@ -766,7 +781,7 @@
 
       SUBROUTINE PowerfamilyIntNETpath (q, lam2, maj, nobs, nvars, &
       & x, y, ju, pf, pf2, dfmax, pmax, nlam, flmin, ulam, eps, &
-      & maxit, nalam, b0, beta, m, nbeta, alam, npass, jerr)
+      & maxit, nalam, b0, beta, m, nbeta, alam, npass, jerr, strong)
       
          IMPLICIT NONE
 !------- arg types -----------------------------------------------
@@ -782,7 +797,8 @@
          DOUBLE PRECISION :: pf (nvars), pf2 (nvars),  ulam (nlam)
          DOUBLE PRECISION :: beta (pmax, nlam), b0 (nlam)
          DOUBLE PRECISION :: alam (nlam), maj (nvars)
-
+         LOGICAL :: strong
+         
 !------- local declarations -------------------------------------
          DOUBLE PRECISION :: d, dif, oldb, u, v, al, alf, flmin
          DOUBLE PRECISION :: decib, fdr, dl (nobs), r (nobs)
@@ -812,12 +828,17 @@
 !   jxx = 0 using the strong rule
 !   jxx = 1 not using the strong rule
          jxx = 0
+         IF (strong .EQV. .TRUE.) THEN
+            jxx = 0
+         ELSE
+            jxx = 1
+         END IF
          
 !---------- lambda loop -----------------------------------------
          mnl = Min (MNLAM, nlam)
          IF (flmin < 1.0D0) THEN
             flmin = Max (MFL, flmin)
-            alf = flmin ** (1.0D0/(nlam-1.0D0))
+            alf = flmin ** (1.0D0 / (nlam-1.0D0))
          END IF
             vl = 0.0D0
             CALL PowerdrvInt(q, nobs, nvars, x, y, r, vl, decib, fdr)

@@ -1,0 +1,3 @@
+T_accu is the original file, where validation set size is 20000.
+
+T_accu24 has validation set with size of 100.

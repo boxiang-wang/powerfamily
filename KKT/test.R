@@ -110,16 +110,17 @@ ctr
 
 
 ## compare timing
-load("D:\\GitHub\\powerfamily\\data\\leuk.rda")
-x = tx
-y = ty
+load("D:\\GitHub\\powerfamily\\data\\prostate.rda")
+x = prostate.x
+y = prostate.y
 dat = list(x = x, y = y)
 
-
+eps = 1e-8
 require(gcdnet)
 system.time(m2 <- gcdnet(x=dat$x, y=dat$y, maxit=3e7,
                          lambda2=0, method="logit",eps=eps, standardize=T))[3]
 m2$npass
+
 require(glmnet)
 system.time(m3 <- glmnet(x=dat$x, y=dat$y, maxit=3e7,
                          alpha=1, family="binomial",thresh=eps, standardize=T))[3]
@@ -127,11 +128,8 @@ m3$npass
 
 
 
-
 ##################################################
 rm(list=ls(all=T))
-
-
 source("D:/GitHub/powerfamily/U_tool.R")
 setwd("D:/GitHub/powerfamily")
 
@@ -145,16 +143,17 @@ x = tx
 y = ty
 dat = list(x = x, y = y)
 
-dyn.unload("M_powerfamilyNET.dll")
-shell("del M_powerfamilyNET.dll M_powerfamilyNET.o")
-shell("Rcmd SHLIB M_powerfamilyNET.f90 O_auxiliary.f90 -o M_powerfamilyNET.dll")
-dyn.load("M_powerfamilyNET.dll")
+dyn.unload("M_powerfamily.dll")
+shell("del M_powerfamily.dll M_powerfamily.o")
+shell("Rcmd SHLIB M_powerfamily.f90 O_auxiliary.f90 -o M_powerfamily.dll")
+dyn.load("M_powerfamily.dll")
 
 lambda2 = 1; qv = 2; eps = 1e-8; thr = 1e-3
 #KKTperctg(dat, lambda2=lambda2, qv=qv, eps=eps, thr=thr)
 
 system.time(m1 <- GCDpower(x=dat$x, y=dat$y,maxit=3e7,
-                  lambda2=lambda2, qv=qv, method="power",eps=eps, standardize=T))[3]
+                           lambda2=lambda2, qv=qv, method="power",eps=eps,
+                           standardize=T, strong=T))[3]
 m1$npass
 
 
@@ -170,6 +169,56 @@ m2$npass
 
 max(abs(m1$beta-m2$beta))
 
+
+
+
+
+
+
+
+
+##################################################
+rm(list=ls(all=T))
+
+if(.Platform$OS.type == "unix")
+{
+  source("/home/wang3660/Research/PF/U_tool_server.R")
+  setwd("/home/wang3660/Research/PF")
+  load("/home/wang3660/Research/PF/data/arcene.rda")
+}
+
+
+if(.Platform$OS.type == "windows")
+{
+  source("D:/GitHub/powerfamily/U_tool.R")
+  setwd("D:/GitHub/powerfamily")
+  load("D:/GitHub/powerfamily/data/arcene.rda")
+}
+
+
+#load("D:\\GitHub\\powerfamily\\data\\arcene.rda")
+#x = tx
+#y = ty
+#dat = list(x = x, y = y)
+
+set.seed(1234)
+FHT = FHTgen(n=5000, p=100, rho=0.5)
+dat = FHT
+
+lambda2 = 1; qv = 0.5; eps = 1e-8; thr = 1e-3
+system.time(m1 <- GCDpower(x=dat$x, y=dat$y,maxit=3e7,
+                           lambda2=lambda2, qv=qv, method="power",eps=eps,
+                           standardize=T, strong=T))[3]
+m1$npass
+
+
+system.time(m2 <- GCDpower(x=dat$x, y=dat$y,maxit=3e7,
+                           lambda2=lambda2, qv=qv, method="power",eps=eps,
+                           standardize=T, strong=F))[3]
+m2$npass
+
+
+max(abs(m1$beta-m2$beta))
 
 
 

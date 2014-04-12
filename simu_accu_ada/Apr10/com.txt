@@ -1,0 +1,207 @@
+cd Research/PF/simu_accu_ada/Apr10
+
+
+
+bb=12
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=1 rho=0.8 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=2 rho=0.8 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=3 rho=0.8 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+#hancock
+bb=13
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=1 rho=0.8 st=1 s_tr=50 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=2 rho=0.8 st=1 s_tr=50 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=3 rho=0.8 st=1 s_tr=50 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+bb=14
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=50 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=50 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=50 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+#hyland
+bb=15
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.9 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.9 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.9 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+bb=16
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=1 rho=0.9 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=2 rho=0.9 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.8 sina=3 rho=0.9 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+
+cd Research/PF/simu_accu_ada/Apr10
+# wolf
+
+# Apr 10
+bb=17
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+bb=18
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=1 rho=0.7 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=2 rho=0.7 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=3 rho=0.7 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+nest
+
+bb=19
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=1 rho=0.7 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=2 rho=0.7 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=3 rho=0.7 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+bb=20
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=1 rho=0.75 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=2 rho=0.75 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.6 sina=3 rho=0.75 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+strike
+
+bb=21
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.75 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.75 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.75 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+# wolf
+cd Research/PF/simu_accu_ada/Apr10
+
+bb=24
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=100 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=100 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=100 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+# tilde
+bb=25
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.6 st=1 s_tr=100 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.6 st=1 s_tr=100 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.6 st=1 s_tr=100 s_vl=30000 s_ts=30000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+bb=26
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.6 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.6 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.6 st=1 s_tr=100 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+
+bb=23
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=80 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=80 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=80 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+这个不错 就选23吧
+
+
+
+#wolf
+bb=11
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=50 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+# assawa
+bb=27
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=60 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=60 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=60 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+bb=28
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=120 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=120 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=120 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+#tilde
+bb=29
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=90 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=90 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=90 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+bb=30
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=150 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=150 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=150 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+
+
+
+bb=22
+mkdir $bb
+alias R='R --no-saRve'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=200 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=200 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=200 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+C有变成4的
+
+
+cd Research/PF/simu_accu_ada/Apr10
+bb=41
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=100 pp=3000 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=100 pp=3000 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=100 pp=3000 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+
+bb=42
+mkdir $bb
+alias R='R --no-save'
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=1 rho=0.7 st=1 s_tr=100 pp=2000 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina1.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=2 rho=0.7 st=1 s_tr=100 pp=2000 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina2.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args simu=100 mu=0.7 sina=3 rho=0.7 st=1 s_tr=100 pp=2000 s_vl=20000 s_ts=20000 ada=T nms='$bb' ' T_accu.R  $bb/T_accu_sina3.out  > /dev/null 2>&1&
+

@@ -1,0 +1,28 @@
+cd
+cd Research/PF/timingtable/timing_0326
+
+ssh wolf.stat.umn.edu
+
+nohup nice -n19 R CMD BATCH '--args nn=100 pp=5000 rho=0 total.indep=10 strong=T  ' T_timings.R  T_timings_100_5000_0.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args nn=100 pp=5000 rho=0.5 total.indep=10 strong=T ' T_timings.R  T_timings_100_5000_05.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args nn=100 pp=5000 rho=0.95 total.indep=10 strong=T ' T_timings.R  T_timings_100_5000_095.out  > /dev/null 2>&1&
+
+nohup nice -n19 R CMD BATCH '--args nn=5000 pp=100 rho=0 total.indep=10 strong=T ' T_timings.R  T_timings_5000_100_0.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args nn=5000 pp=100 rho=0.5 total.indep=10 strong=T ' T_timings.R  T_timings_5000_100_05.out  > /dev/null 2>&1&
+nohup nice -n19 R CMD BATCH '--args nn=5000 pp=100 rho=0.95 total.indep=10 strong=T ' T_timings.R  T_timings_5000_100_095.out  > /dev/null 2>&1&
+
+
+
+
+
+cd Research/PF/crossvalidation/02_27
+for bb in {25..30}
+do
+   nohup nice -n19 R CMD BATCH '--args dat="prostate" rs='$bb' ' T_newtable1.R  prostate/$bb.out  > /dev/null 2>&1&
+done
+
+
+for bb in {18}
+do
+   nohup nice -n19 R CMD BATCH '--args dat="prostate" rs='$bb' ' T_newtable1.R  prostate/$bb.out  > /dev/null 2>&1&
+done

@@ -8,7 +8,7 @@
 ## or http://users.stat.umn.edu/~yiyang/resources/papers/JCGS_gcdnet.pdf
 powerfamilypath <- function(x, y, nlam, flmin, ulam, isd, 
                      eps, dfmax, pmax, jd, pf, pf2, maxit, lam2, qv, nobs, nvars, 
-                     vnames) {
+                     vnames, strong) {
   #################################################################################
   #data setup
   y <- as.factor(y)
@@ -24,7 +24,7 @@ powerfamilypath <- function(x, y, nlam, flmin, ulam, isd,
                    as.double(x), as.double(y), jd, pf, pf2, dfmax, pmax, nlam, 
                    flmin, ulam, eps, isd, maxit, nalam = integer(1), b0 = double(nlam), 
                    beta = double(pmax * nlam), ibeta = integer(pmax), nbeta = integer(nlam), 
-                   alam = double(nlam), npass = integer(1), jerr = integer(1))
+                   alam = double(nlam), npass = integer(1), jerr = integer(1), strong)
   #################################################################################
   # output
   outlist <- getoutput(fit, maxit, pmax, nvars, vnames)
@@ -65,7 +65,7 @@ GCDpower <- function(x, y, nlambda = 100, method = c("power","hhsvm"),
                         lambda.factor = ifelse(nobs < nvars, 0.01,1e-04), lambda = NULL, 
                         lambda2 = 0, pf = rep(1, nvars), pf2 = rep(1, nvars), exclude, 
                    dfmax = nvars + 1, pmax = min(dfmax * 1.2, nvars), standardize = TRUE, 
-                   eps = 1e-08, maxit = 1e+06, delta = 2, qv = 2) {
+                   eps = 1e-08, maxit = 1e+06, delta = 2, qv = 2, strong = T) {
   #################################################################################
   #data setup
   method <- match.arg(method)
@@ -122,7 +122,7 @@ GCDpower <- function(x, y, nlambda = 100, method = c("power","hhsvm"),
   fit <- switch(method, 
                 power = powerfamilypath(x, y, nlam, flmin, 
                                  ulam, isd, eps, dfmax, pmax, jd, pf, pf2, maxit, 
-                                        lam2, qv, nobs, nvars, vnames), 
+                                        lam2, qv, nobs, nvars, vnames, strong), 
                 hhsvm = hsvmpath(x, y, nlam, flmin, 
                                  ulam, isd, eps, dfmax, pmax, jd, pf, pf2, maxit, 
                                  lam2, delta, nobs, nvars, vnames)

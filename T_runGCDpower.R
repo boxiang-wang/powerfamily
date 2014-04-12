@@ -104,3 +104,17 @@ dim(x); length(y)
 y = c(-1, 1)[as.factor(y)]
 
 
+############## Try Adaptive Elastic Net Penalized Holder Classifiers
+set.seed(1234)
+FHT = FHTgen(n=80, p=500, rho=0.5)
+dat = FHT
+
+source("D:/GitHub/powerfamily/U_tool.R")
+m = cv.GCDpower(x=dat$x, y=dat$y,
+             lambda2=0.01, qv=2, method="power",eps=1e-8, standardize=T)
+aa=coef(m, s="lambda.1se")[-1]
+m1 = GCDpower(x=dat$x, y=dat$y,
+             lambda2=0.01, qv=2, method="power",eps=1e-8, standardize=T, pf=((abs(aa) + 1/80)^(-1)))
+
+plot(m1)
+plot(m$GCDpower.fit)

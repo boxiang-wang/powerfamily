@@ -12,5 +12,5 @@ source("M_FHTgen.R")
 
 source("DrSVM/U_cv.DrSVM.fix2.R")
 source("DrSVM/M_coef.DrSVM.R")
-source("DrSVM/O_DrSVM_Fix2.R")
-dyn.load("M_powerfamilyNET.dll")
+source("DrSVM/M_DrSVM_Fix2_modified.R")
+dyn.load("M_powerfamily.dll")
